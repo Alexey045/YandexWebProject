@@ -2,29 +2,18 @@
 
 {% block content %}
 <h1>Авторизация</h1>
-<form action="" method="post" novalidate>
+<form action="" method="post">
     {{ form.hidden_tag() }}
-    <p>
-        {{ form.username.label }}<br>
-        {{ form.username(class="form-control") }}<br>
-        {% for error in form.username.errors %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-    {% endfor %}
+    <p style="margin-bottom: .25rem;">
+        {{ form.email.label }}
+        {{ form.email(class="form-control", type="email") }}
     </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-    {% endfor %}
+    <p style="margin-bottom: .5rem;">
+        {{ form.password.label }}
+        {{ form.password(class="form-control", type="password") }}
     </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    <p style="margin-bottom: .25rem;">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-outline-dark") }}</p>
-    <h4>Ещё не зарегистрированы?</h4>
-    <a href="/registration" class="link">Зарегистрироваться</a>
+    <p class="mt-5">Ещё не зарегистрированы? <a href="/registration">Регистрация</a></p>
 </form>
 {% endblock %}
