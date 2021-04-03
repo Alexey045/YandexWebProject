@@ -17,10 +17,10 @@
     <!-- {{title}} -->
 </head>
 <body>
-<header class="shadow border-bottom">
+<header class="shadow border-bottom mb-5">
     <nav class="navbar navbar-expand-lg navbar-dark text-white" style="background-color: #212529;">
         <div class="container-fluid">
-            <div class="navbar-logo"><a class="navbar-brand" href="#">Logo</a></div>
+            <div class="navbar-logo"><a class="navbar-brand" href="/index">Logo</a></div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                     aria-label="Toggle navigation" style="outline: 0px;">
@@ -29,7 +29,7 @@
             <div class="collapse navbar-collapse" id="navbarNav" style="flex-grow: 0;">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Личный
+                        <a class="nav-link" href="/index1">Личный
                             кабинет</a>
                     </li>
                     <li class="nav-item">
@@ -43,21 +43,99 @@
 <!-- Begin page content -->
 <main role="main" class="container">
     <!-- {% block content %}{% endblock %} -->
-    <div class="col-md" style="text-align: center">Здесь будет контент.</div>
-</main>
-<footer class="pt-4 my-md-5 pt-md-5 border-top"
-        style="text-align: center;">
-    <div>
-        <div class="col-md">
-            <h5>О нас</h5>
-            <ul class="list-unstyled text-small">
-                <li><a class="text-muted" href="#">Team</a></li>
-                <li><a class="text-muted" href="#">Locations</a></li>
-                <li><a class="text-muted" href="#">Privacy</a></li>
-                <li><a class="text-muted" href="#">Terms</a></li>
-            </ul>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img src="/static/img/phone.jpg" class="card-img-top"
+                     style="padding-left: .75rem; padding-right: .75rem; padding-top: .5rem;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Iphone 11</h5>
+                    <!--<p class="card-text">Some quick example text to build on the card title and make up the
+                            bulk
+                            of
+                            the card's content.</p>-->
+                    <a href="/index" class="stretched-link"></a>
+                    <div class="d-grip col mx-auto">
+                        <a href="/index1" class="btn btn-outline-dark
+                        center-block col mx-auto stretched-link">
+                            Добавить в корзину</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</main>
+<!-- Footer -->
+<footer class="bg-light text-center text-lg-start border-top mt-4">
+    <!-- Grid container -->
+    <div class="container p-4">
+        <!--Grid row-->
+        <div class="row">
+            <!--Grid column-->
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Footer Content</h5>
+
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
+                    molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
+                    voluptatem veniam, est atque cumque eum delectus sint!
+                </p>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Links</h5>
+
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <a href="#!" class="text-dark">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 3</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 4</a>
+                    </li>
+                </ul>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase mb-0">Links</h5>
+
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#!" class="text-dark">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 3</a>
+                    </li>
+                    <li>
+                        <a href="#!" class="text-dark">Link 4</a>
+                    </li>
+                </ul>
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
 </footer>
+<!-- Footer -->
 </body>
 </html>
