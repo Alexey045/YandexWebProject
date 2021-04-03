@@ -29,18 +29,25 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav" style="flex-grow: 0;">
                 <ul class="navbar-nav">
-                    {% if not check%}
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Войти</a> <!-- user -->
+                        <a class="nav-link" href="/login">Войти</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/registration">Регистрация</a> <!-- user -->
+                        <a class="nav-link" href="/registration">Регистрация</a>
+                    </li>
+                    <!--
+                    {% if not check%}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registration">Регистрация</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/registration">Профиль</a> <!-- user -->
+                        <a class="nav-link" href="/registration">Профиль</a>
                     </li>
-                    {% endif %}
+                    {% endif %} -->
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Корзина</a> <!-- cart -->
                     </li>
@@ -78,68 +85,37 @@
     <!-- Grid container -->
     <div class="container p-4">
         <!--Grid row-->
-        <div class="row">
-            <!--Grid column-->
-            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                <h5 class="text-uppercase">Footer Content</h5>
+        <!--Grid column-->
+        <div class="mb-4 mb-md-0">
+            <h5 class="text-uppercase">Footer Content</h5>
 
-                <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-                    molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
-                    voluptatem veniam, est atque cumque eum delectus sint!
-                </p>
-            </div>
-            <!--Grid column-->
-
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase">Links</h5>
-
-                <ul class="list-unstyled mb-0">
-                    <li>
-                        <a href="#!" class="text-dark">Link 1</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 2</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 3</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 4</a>
-                    </li>
-                </ul>
-            </div>
-            <!--Grid column-->
-
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase mb-0">Links</h5>
-
-                <ul class="list-unstyled">
-                    <li>
-                        <a href="#!" class="text-dark">Link 1</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 2</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 3</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-dark">Link 4</a>
-                    </li>
-                </ul>
-            </div>
-            <!--Grid column-->
+            <p>
+                Этот сайт не является интернет-магазином. Все представленные товары на данном сайте не
+                продаются. Пожайлуста, не
+                оставляйте здесь свои настоящие
+                имена, логины и пароли.
+            </p>
+            <br>
+            <p>Отдельное спасибо Даниилу Покрышкину за советы по дизайну сайта.</p>
         </div>
-        <!--Grid row-->
+        <!--Grid column-->
+        <div class="mb-4 mb-md-0 text-center">
+            <h5 class="text-uppercase mb-0">Ссылки</h5>
+            <div>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="/about" class="text-dark">О нас</a></li>
+                    <li><a href="/developers" class="text-dark">Разработчики</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--Grid column-->
     </div>
+    <!--Grid row-->
     <!-- Grid container -->
 
     <!-- Copyright -->
     <div class="text-center p-3">
-        © 2021 Copyright: Alexey
+        © 2021 Copyright: Alexey Alexey
     </div>
     <!-- Copyright -->
 </footer>
