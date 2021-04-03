@@ -4,6 +4,8 @@ from werkzeug.utils import redirect
 from forms import RegisterForm, LoginForm
 from data import db_session
 
+check = False  # ToDo
+
 
 # from data.users import User
 
@@ -52,7 +54,7 @@ def login():
     if form.validate_on_submit():
         # print(request.form.get('remember_me')) y - check true. None - check false
         return redirect('/success')
-    return render_template('login.html', title='Авторизация', form=form)
+    return render_template('login.html', title='Авторизация', form=form, check=check)
 
 
 if __name__ == '__main__':

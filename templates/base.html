@@ -29,12 +29,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav" style="flex-grow: 0;">
                 <ul class="navbar-nav">
+                    {% if not check%}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Войти</a> <!-- user -->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/registration">Регистрация</a> <!-- user -->
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registration">Профиль</a> <!-- user -->
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Корзина</a> <!-- cart -->
                     </li>
