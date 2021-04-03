@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 from flask_wtf import FlaskForm
@@ -35,14 +35,13 @@ app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 
 
 @app.route('/')
-def test():
+def base():
     return render_template('base.html', title='Главная страница')
 
 
 @app.route('/success')
-def third():
+def success():
     return 'success'
-    # return render_template('3.html')
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -53,12 +52,10 @@ def registration():
             return render_template('registration.html',
                                    form=form,
                                    message="Пароли не совпадают!")
-        user = {"name": form.name.data,
+        """user = {"name": form.name.data,
                 "email": form.email.data,
-                "password": form.password.data}
-        print(user)
-        print(generate_password_hash(form.password.data))
-        # user.set_password(form.password.data)
+                "password": form.password.data}"""
+        # user.set_password(form.password.data) for db
         return redirect('/')
     return render_template('registration.html', title='Регистрация', form=form)
 
@@ -67,6 +64,7 @@ def registration():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        # print(request.form.get('remember_me')) y - check true. None - check false
         return redirect('/success')
     return render_template('login.html', title='Авторизация', form=form)
 
