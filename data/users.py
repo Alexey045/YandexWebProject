@@ -1,22 +1,14 @@
-import datetime
 import sqlalchemy
-from flask_login import UserMixin
 from data.db_session import SqlAlchemyBase
 
 
-class User(SqlAlchemyBase, UserMixin):
-    __tablename__ = 'users'
+class User(SqlAlchemyBase):
+    __tablename__ = 'Users'
 
-    id = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)
-    surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    age = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    position = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    email = sqlalchemy.Column(sqlalchemy.String,
-                              index=True, unique=True, nullable=True)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     default=datetime.datetime.now)
+    Login = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+
+    Name = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=False)
+
+    PasswordHash = sqlalchemy.Column(sqlalchemy.String)
+
+    Status = sqlalchemy.Column(sqlalchemy.Integer)
