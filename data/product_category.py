@@ -10,7 +10,7 @@ class ProductCategory(SqlAlchemyBase):
 
   Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
-  CategoryId = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Category.id'), index=True, nullable=False)
+  CategoryId = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Category.Id'), index=True, nullable=False)
   Category = relationship('Category')
 
   ProductId = sqlalchemy.Column(sqlalchemy.Integer, ForeignKey('Product.Id'), nullable=False)

@@ -11,15 +11,12 @@ class CartProduct(SqlAlchemyBase):
     Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
     OwnerCart = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Carts.Id'), index=True, nullable=False)
-    Owner = relationship('Cart')
 
     ProductId = sqlalchemy.Column(sqlalchemy.Integer, ForeignKey('Product.Id'), nullable=False)
-    Product = relationship('Product')  # ToDo при регистрации тут выдает ошибку
 
     Status = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
 
     RealTimePrice = sqlalchemy.Column(sqlalchemy.REAL, ForeignKey('Product.Price'), nullable=False)
-    RealTimePriceRelation = relationship('')
 
     PayTimePrice = sqlalchemy.Column(sqlalchemy.REAL)
 

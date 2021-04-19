@@ -20,6 +20,7 @@ def check_password(self, password):
     return check_password_hash(self.hashed_password, password)
 
 
+db_session.global_init("db/database.db")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 
@@ -113,5 +114,4 @@ def developers():
 
 
 if __name__ == '__main__':
-    db_session.global_init("db/database.db")
     app.run(port=8080, host='127.0.0.1')
