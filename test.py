@@ -1,25 +1,10 @@
 from flask import Flask, render_template  # request
-from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 from data import db_session
 from data.users import User
 from forms import RegisterForm, LoginForm
 
-
 # from flask_login import LoginManager, login_user, login_required, logout_user
-
-
-# from data.users import User
-
-
-def set_password(self, password):
-    self.hashed_password = generate_password_hash(password)
-
-
-def check_password(self, password):
-    return check_password_hash(self.hashed_password, password)
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 
@@ -60,7 +45,6 @@ def registration():
         user = User(
             Name=form.name.data,
             Login=form.email.data,
-            PasswordHash=form.password.data,
             Status=0
         )
         user.set_password(form.password.data)
