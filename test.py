@@ -92,12 +92,12 @@ def profile():
 
 @app.route('/change_profile')  # ToDo
 def change_profile():
-    pass
+    return render_template('change_profile.html', title='Изменение профиля')
 
 
 @app.route('/add_product')
 def add_product():
-    pass
+    return render_template('add_product.html', title='Добавление товара')
 
 
 if __name__ == '__main__':
