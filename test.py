@@ -1,5 +1,5 @@
 from flask import Flask, render_template  # request
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
 from data import db_session
 from data.users import User
@@ -67,12 +67,12 @@ def login():
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
-"""
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect("/")"""
+    return redirect("/")
 
 
 @app.route('/about')
@@ -83,6 +83,21 @@ def about():
 @app.route('/developers')
 def developers():
     return render_template('developers.html', title='Разработчики')
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html', title='Профиль')
+
+
+@app.route('/change_profile')  # ToDo
+def change_profile():
+    pass
+
+
+@app.route('/add_product')
+def add_product():
+    pass
 
 
 if __name__ == '__main__':
