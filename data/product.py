@@ -3,14 +3,14 @@ from data.db_session import SqlAlchemyBase
 
 
 class Product(SqlAlchemyBase):
-  __tablename__ = 'Product'
+    __tablename__ = 'Product'
 
-  Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
-  Name = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=False)
+    Name = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=False)
 
-  Description = sqlalchemy.Column(sqlalchemy.String)
+    Description = sqlalchemy.Column(sqlalchemy.String)
 
-  Price = sqlalchemy.Column(sqlalchemy.REAL)
+    Price = sqlalchemy.Column(sqlalchemy.REAL)
 
-  Count = sqlalchemy.Column(sqlalchemy.Integer)
+    Count = sqlalchemy.Column(sqlalchemy.Integer)

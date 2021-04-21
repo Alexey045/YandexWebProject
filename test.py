@@ -1,11 +1,11 @@
+import flask_login
 from flask import Flask, render_template  # request
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
 from data import db_session
 from data.users import User
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, ProfileForm
 
-# from flask_login import LoginManager, login_user, login_required, logout_user
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 login_manager = LoginManager()
@@ -53,6 +53,33 @@ def registration():
     return render_template('registration.html', title='Регистрация', form=form)
 
 
+@app.route('/change_profile', methods=['GET', 'POST'])
+def change_profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('change_profile.html', title='Изменение профиля',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.id == form.email.data).first():
+            if form.email.data == flask_login.current_user.id:
+                pass
+            else:
+                return render_template('change_profile.html', title='Изменение профиля',
+                                       form=form,
+                                       message="Такой пользователь уже есть")
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+        user.id = form.email.data
+        user.set_password(form.password.data)
+        user.Name = form.name.data
+        db_sess.commit()
+        login_user(user, remember=False)
+        return redirect('/profile')
+    return render_template('change_profile.html', title='Изменение профиля', form=form)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -90,12 +117,17 @@ def profile():
     return render_template('profile.html', title='Профиль')
 
 
-@app.route('/change_profile')  # ToDo
-def change_profile():
-    return render_template('change_profile.html', title='Изменение профиля')
+@login_required
+@app.route('/delete_user', methods=['GET', 'POST'])
+def delete_user():
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+    db_sess.delete(user)
+    db_sess.commit()
+    return redirect('/')
 
 
-@app.route('/add_product')
+@app.route('/add_product')  # ToDo
 def add_product():
     return render_template('add_product.html', title='Добавление товара')
 

@@ -6,9 +6,9 @@ from sqlalchemy.orm import relationship
 
 
 class Cart(SqlAlchemyBase):
-  __tablename__ = 'Carts'
+    __tablename__ = 'Carts'
 
-  Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
-  OwnerLogin = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Users.id'), index=True, nullable=False)
-  Owner = relationship('User')
+    OwnerLogin = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Users.id'), index=True, nullable=False)
+    Owner = relationship('User')
