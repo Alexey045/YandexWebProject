@@ -17,17 +17,6 @@ def base():
     return render_template('main.html', title='Главная страница')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
-
-
-@app.route('/success')
-def success():
-    return 'success'
-
-
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = RegisterForm()
@@ -53,7 +42,46 @@ def registration():
     return render_template('registration.html', title='Регистрация', form=form)
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', title='Профиль')
+
+
+@login_required
+@app.route('/delete_profile', methods=['GET', 'POST'])
+def delete_profile():
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+    db_sess.delete(user)
+    db_sess.commit()
+    return redirect('/')
+
+
 @app.route('/change_profile', methods=['GET', 'POST'])
+@login_required
 def change_profile():
     form = ProfileForm()
     if form.validate_on_submit():
@@ -80,26 +108,15 @@ def change_profile():
     return render_template('change_profile.html', title='Изменение профиля', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.id == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
-        return render_template('login.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
+@app.route('/success')
+def success():
+    return 'success'
 
 
 @app.route('/about')
@@ -112,22 +129,8 @@ def developers():
     return render_template('developers.html', title='Разработчики')
 
 
-@app.route('/profile')
-def profile():
-    return render_template('profile.html', title='Профиль')
-
-
-@login_required
-@app.route('/delete_user', methods=['GET', 'POST'])
-def delete_user():
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
-    db_sess.delete(user)
-    db_sess.commit()
-    return redirect('/')
-
-
 @app.route('/add_product')  # ToDo
+@login_required
 def add_product():
     return render_template('add_product.html', title='Добавление товара')
 
