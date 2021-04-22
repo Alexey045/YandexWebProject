@@ -1,13 +1,19 @@
 import flask_login
-from flask import Flask, render_template  # request
+from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
-from data import db_session
+from data import db_session, Category
 from data.users import User
-from forms import RegisterForm, LoginForm, ProfileForm
+from forms import RegisterForm, LoginForm, ProfileForm, ProductForm
+import os
+from werkzeug.utils import secure_filename
 
+# ToDo сделать загрузку изображения и его сохранение
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 db_session.global_init("db/database.db")
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '/static/img'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -109,6 +115,18 @@ def change_profile():
     return render_template('change_profile.html', title='Изменение профиля', form=form)
 
 
+@app.route('/add_product')
+@login_required
+def add_product():
+    form = ProductForm()
+    db_sess = db_session.create_session()
+    res = db_sess.query(Category.Name).all()
+    form.category.choices = [category[0] for category in res]
+    if form.validate_on_submit():  # ToDo Сделать добавление товара в БД
+        pass
+    return render_template('add_product.html', title='Добавление товара', form=form)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -128,12 +146,6 @@ def about():
 @app.route('/developers')
 def developers():
     return render_template('developers.html', title='Разработчики')
-
-
-@app.route('/add_product')  # ToDo
-@login_required
-def add_product():
-    return render_template('add_product.html', title='Добавление товара')
 
 
 if __name__ == '__main__':
