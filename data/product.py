@@ -14,3 +14,5 @@ class Product(SqlAlchemyBase):
     Price = sqlalchemy.Column(sqlalchemy.REAL)
 
     Count = sqlalchemy.Column(sqlalchemy.Integer)
+
+    ImageId = sqlalchemy.Column(sqlalchemy.Integer)

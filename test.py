@@ -2,6 +2,8 @@ import flask_login
 from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
+
+import data
 from data import db_session, Category
 from data.users import User
 from forms import RegisterForm, LoginForm, ProfileForm, ProductForm
@@ -122,8 +124,13 @@ def add_product():
     db_sess = db_session.create_session()
     res = db_sess.query(Category.Name).all()
     form.category.choices = [category[0] for category in res]
-    if form.validate_on_submit():  # ToDo Сделать добавление товара в БД
-        pass
+    if form.validate_on_submit():
+        data.add_product(form.name.data,
+                         form.description.data,
+                         form.price.data,
+                         form.count.data,
+                         form.image)
+        return redirect("/add_product") # TODO Доделать сохранение картинки в data.__init__.py
     return render_template('add_product.html', title='Добавление товара', form=form)
 
 
