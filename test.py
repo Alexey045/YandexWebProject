@@ -117,7 +117,7 @@ def change_profile():
     return render_template('change_profile.html', title='Изменение профиля', form=form)
 
 
-@app.route('/add_product')
+@app.route('/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product():
     form = ProductForm()
@@ -129,7 +129,8 @@ def add_product():
                          form.description.data,
                          form.price.data,
                          form.count.data,
-                         form.image)
+                         form.image,
+                         form)
         return redirect("/add_product") # TODO Доделать сохранение картинки в data.__init__.py
     return render_template('add_product.html', title='Добавление товара', form=form)
 

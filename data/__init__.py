@@ -1,6 +1,9 @@
 import os
 import string
 from random import sample, shuffle
+from tempfile import SpooledTemporaryFile
+
+from werkzeug.utils import secure_filename
 
 from data import db_session
 from data.carts import Cart
@@ -29,8 +32,8 @@ def generate_random_trash(m):
         a.extend(sample(digits, b))
         shuffle(a)
         a = ''.join(a)
-        if (a + ".jpg" not in os.listdir("../static/img/")) and (a + ".png" not in os.listdir("../static/img/")) and (
-                a + ".jpeg" not in os.listdir("../static/img/")):
+        if (a + ".jpg" not in os.listdir("./static/img/")) and (a + ".png" not in os.listdir("./static/img/")) and (
+                a + ".jpeg" not in os.listdir("./static/img/")):
             break
     return a
 
@@ -57,19 +60,20 @@ def get_all_products_with_category(categorys):
     return Access
 
 
-def add_product(name, description, price, count, image):
+def add_product(name, description, price, count, image, form):
     db_sess = db_session.create_session()
     imageid = generate_random_trash(10)
+    imageType = image.data.filename.split(".")[-1]
     new_product = Product(Name=name,
             Description=description,
             Price=price,
             Count=count,
             ImageId=imageid)
-    with open(f"../static/img/{imageid}", "wt") as f: # TODO Доделать сохранение картинки
-        f.write(image)
+    with open(f"./static/img/{imageid}.{imageType}", "wb") as f:
+        f.write(image.data.stream.read())
     db_sess.add(new_product)
     db_sess.commit()
 
 
 if __name__ == '__main__':
-    print(os.listdir("../static/img/"))
+    pass
