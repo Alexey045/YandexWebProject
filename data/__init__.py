@@ -10,7 +10,6 @@ from data.carts import Cart
 from data.carts_product import CartProduct
 from data.category import Category
 from data.product import Product
-from data.product_category import ProductCategory
 from data.users import User
 
 
@@ -32,7 +31,8 @@ def generate_random_trash(m):
         a.extend(sample(digits, b))
         shuffle(a)
         a = ''.join(a)
-        if (a + ".jpg" not in os.listdir("./static/img/")) and (a + ".png" not in os.listdir("./static/img/")) and (
+        if (a + ".jpg" not in os.listdir("./static/img/")) and (
+                a + ".png" not in os.listdir("./static/img/")) and (
                 a + ".jpeg" not in os.listdir("./static/img/")):
             break
     return a
@@ -46,11 +46,6 @@ def get_all_categorys():
 def get_all_products_with_category(categorys):
     db_sess = db_session.create_session()
     ProductCategoryList = None
-    for i in categorys:
-        if not ProductCategoryList:
-            ProductCategoryList = db_sess.query(ProductCategory.ProductId).filter(ProductCategory.CategoryId == i.Id)
-        else:
-            ProductCategoryList = ProductCategoryList.filter(ProductCategory.CategoryId == i.Id)
     ProductCategoryList = ProductCategoryList.all()[0]
     Products = db_sess.query(Product).all()
     Access = []
@@ -60,16 +55,19 @@ def get_all_products_with_category(categorys):
     return Access
 
 
-def add_product(name, description, price, count, image, form):
+def add_product(name, description, price, count, image, form, res):
     db_sess = db_session.create_session()
     imageid = generate_random_trash(10)
-    imageType = image.data.filename.split(".")[-1]
+    cat = None
+    for categories in res:
+        if form.category.data in categories:
+            cat = categories[0]
     new_product = Product(Name=name,
-            Description=description,
-            Price=price,
-            Count=count,
-            ImageId=imageid)
-    with open(f"./static/img/{imageid}.{imageType}", "wb") as f:
+                          Description=description,
+                          Price=price,
+                          Count=count,
+                          ImageId=imageid, Category=cat)
+    with open(f"./static/img/{imageid}.jpg", "wb") as f:
         f.write(image.data.stream.read())
     db_sess.add(new_product)
     db_sess.commit()

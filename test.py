@@ -1,16 +1,15 @@
+import pathlib
+
 import flask_login
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
-
 import data
-from data import db_session, Category
+from data import db_session, Category, Product
 from data.users import User
 from forms import RegisterForm, LoginForm, ProfileForm, ProductForm
 import os
-from werkzeug.utils import secure_filename
 
-# ToDo сделать загрузку изображения и его сохранение
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 db_session.global_init("db/database.db")
 app = Flask(__name__)
@@ -23,7 +22,58 @@ login_manager.init_app(app)
 
 @app.route('/')
 def base():
-    return render_template('main.html', title='Главная страница')
+    db_sess = db_session.create_session()
+    res = db_sess.query(Category.Name).all()
+    categories = [category[0] for category in res]
+    return render_template('main.html', title='Главная страница', categories=categories)
+
+
+@app.route('/<Cate>')
+def cat(Cate):
+    name = str(request.url).split('/')[-1]
+    db_sess = db_session.create_session()
+    ID = db_sess.query(Category.Id).filter(Category.Name == name).first()[0]
+    products = db_sess.query(Product.Name, Product.Price, Product.ImageId, Product.Id,
+                             Product.Count).filter(
+        Product.Category == int(ID)).all()
+    return render_template('category.html', title=f'{str(Cate).capitalize()}', products=products,
+                           cat=f'{str(Cate).capitalize()}')
+
+
+@app.route('/<Cate>/<int:prod>', methods=['GET', 'POST'])
+def prod(Cate, prod):
+    db_sess = db_session.create_session()
+    ID = int(str(request.url).split('/')[-1])
+    if request.form.get("add"):  # ToDo
+        pass
+    if request.form.get("delete"):
+        product = db_sess.query(Product).filter(Product.Id == ID).first()
+        img = db_sess.query(Product.ImageId).filter(Product.Id == ID).first()
+        try:
+            os.remove(f'./static/img/{img[0]}.jpg')
+        except Exception:
+            pass
+        db_sess.delete(product)
+        db_sess.commit()
+        return redirect(f'/{Cate}')
+    res = db_sess.query(Product.Name, Product.Price, Product.Description, Product.ImageId,
+                        Product.Count).filter(
+        Product.Id == ID).all()[0]
+    return render_template('product.html', title=res[0], product=res, Cate=Cate)
+
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html', title='Коризна')
+
+
+@app.route('/delete_product')
+def delete_product():
+    db_sess = db_session.create_session()
+    product = db_sess.query(Product).filter().first()
+    db_sess.delete(product)
+    db_sess.commit()
+    return redirect('/')
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -122,16 +172,16 @@ def change_profile():
 def add_product():
     form = ProductForm()
     db_sess = db_session.create_session()
-    res = db_sess.query(Category.Name).all()
-    form.category.choices = [category[0] for category in res]
+    res = db_sess.query(Category.Id, Category.Name).all()
+    form.category.choices = [category[1] for category in res]
     if form.validate_on_submit():
         data.add_product(form.name.data,
                          form.description.data,
                          form.price.data,
                          form.count.data,
                          form.image,
-                         form)
-        return redirect("/add_product") # TODO Доделать сохранение картинки в data.__init__.py
+                         form, res)
+        return redirect("/add_product")
     return render_template('add_product.html', title='Добавление товара', form=form)
 
 
