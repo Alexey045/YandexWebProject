@@ -10,5 +10,4 @@ class Cart(SqlAlchemyBase):
 
     Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
-    OwnerLogin = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Users.id'), index=True, nullable=False)
-    Owner = relationship('User')
+    Owner = sqlalchemy.Column(sqlalchemy.String, ForeignKey('Users.id'), index=True, nullable=False)

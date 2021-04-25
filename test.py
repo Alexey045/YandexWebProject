@@ -89,14 +89,10 @@ def registration():
             return render_template('registration.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        user = User(
-            Name=form.name.data,
-            id=form.email.data,
-            Status=0
-        )
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
+        data.create_user(id=form.email.data,
+                         name=form.name.data,
+                         status=0,
+                         password=form.password.data)
         return redirect('/login')
     return render_template('registration.html', title='Регистрация', form=form)
 

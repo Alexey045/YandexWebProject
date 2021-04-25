@@ -45,14 +45,27 @@ def get_all_categorys():
 
 def get_all_products_with_category(categorys):
     db_sess = db_session.create_session()
-    ProductCategoryList = None
-    ProductCategoryList = ProductCategoryList.all()[0]
     Products = db_sess.query(Product).all()
     Access = []
     for i in Products:
-        if i.Id in ProductCategoryList:
+        if i.Id in categorys:
             Access.append(i)
     return Access
+
+
+def create_user(id, name, password, status):
+    db_sess = db_session.create_session()
+    user = User(id=id, Name=name, Status=status)
+    user.set_password(password)
+    create_cart(user, db_sess)
+    db_sess.add(user)
+    db_sess.commit()
+
+
+def create_cart(user, db_sess):
+    cart = Cart(Owner=user.id)
+    db_sess.add(cart)
+    db_sess.commit()
 
 
 def add_product(name, description, price, count, image, form, res):
@@ -70,6 +83,28 @@ def add_product(name, description, price, count, image, form, res):
     with open(f"./static/img/{imageid}.jpg", "wb") as f:
         f.write(image.data.stream.read())
     db_sess.add(new_product)
+    db_sess.commit()
+
+
+def add_to_cart(user, product):
+    db_sess = db_session.create_session()
+    if isinstance(user, User):
+        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user.id).first()
+    elif isinstance(user, int):
+        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user).first()
+    else:
+        raise Exception("Недопустимый класс user")
+    if isinstance(product, Product):
+        product = product
+    elif isinstance(product, int):
+        product = db_sess.query(Product).filter(Product.Id == product).first()
+    else:
+        raise Exception("Недопустимый класс product")
+    cartproduct = CartProduct(OwnerCart=cartId,
+                              ProductId=product.Id,
+                              Status=0,
+                              RealTimePrice=product.Price)
+    db_sess.add(cartproduct)
     db_sess.commit()
 
 
