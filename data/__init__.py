@@ -108,5 +108,17 @@ def add_to_cart(user, product):
     db_sess.commit()
 
 
+def buy_product(user_or_cart):
+    db_sess = db_session.create_session()
+    if isinstance(user_or_cart, User):
+        cart = db_sess.query(Cart).filter(Cart.Owner == user_or_cart.Id).first()
+    elif isinstance(user_or_cart, Cart):
+        cart = user_or_cart
+    else:
+        raise Exception("Недопустимый класс user_or_cart")
+    all_prodCart = db_sess.query(CartProduct).filter(CartProduct.Status == 0, CartProduct.OwnerCart == cart.Id)
+    return all_prodCart
+
+
 if __name__ == '__main__':
     pass
