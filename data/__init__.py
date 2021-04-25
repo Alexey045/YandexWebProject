@@ -89,9 +89,9 @@ def add_product(name, description, price, count, image, form, res):
 def add_to_cart(user, product):
     db_sess = db_session.create_session()
     if isinstance(user, User):
-        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user.id).first()
+        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user.id).first()[0]
     elif isinstance(user, int):
-        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user).first()
+        cartId = db_sess.query(Cart.Id).filter(Cart.Owner == user).first()[0]
     else:
         raise Exception("Недопустимый класс user")
     if isinstance(product, Product):
