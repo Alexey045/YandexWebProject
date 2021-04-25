@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>Корзина</h3>
+{% if current_user.is_anonymous %}
+<h3 style="text-align: center;">Чтобы использовать корзину, нужно пройти регистрацию или войти.</h3>
+<h5></h5>
+{% elif not current_user.is_anonymous %}
+{% endif %}
 {% endblock %}

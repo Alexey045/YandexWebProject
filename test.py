@@ -1,5 +1,3 @@
-import pathlib
-
 import flask_login
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_user, login_required, logout_user
@@ -28,10 +26,16 @@ def base():
     return render_template('main.html', title='Главная страница', categories=categories)
 
 
-@app.route('/<Cate>')
+@app.route('/<Cate>', methods=['GET', 'POST'])
 def cat(Cate):
     name = str(request.url).split('/')[-1]
     db_sess = db_session.create_session()
+    if request.method == 'POST':
+        if flask_login.current_user.is_anonymous:
+            return redirect('/registration')
+        elif not flask_login.current_user.is_anonymous:
+            user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+            data.add_to_cart(user, int(request.form['add']))
     ID = db_sess.query(Category.Id).filter(Category.Name == name).first()[0]
     products = db_sess.query(Product.Name, Product.Price, Product.ImageId, Product.Id,
                              Product.Count).filter(
@@ -45,7 +49,11 @@ def prod(Cate, prod):
     db_sess = db_session.create_session()
     ID = int(str(request.url).split('/')[-1])
     if request.form.get("add"):  # ToDo
-        pass
+        if flask_login.current_user.is_anonymous:
+            return redirect('/registration')
+        elif not flask_login.current_user.is_anonymous:
+            user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+            data.add_to_cart(user, ID)
     if request.form.get("delete"):
         product = db_sess.query(Product).filter(Product.Id == ID).first()
         img = db_sess.query(Product.ImageId).filter(Product.Id == ID).first()

@@ -15,9 +15,12 @@
                 <p class="card-text">{{ product[1] }} р.</p>
                 <a href="/{{ cat }}/{{ product[3] }}" class="stretched-link"></a>
                 <div class="d-grip col mx-auto">
-                    <a href="#" class="btn btn-outline-dark
-                                center-block col mx-auto stretched-link">
-                        Добавить в корзину</a>
+                    <form method="post" action="">
+                        <button type="submit" class="btn btn-outline-dark
+                        center-block col mx-auto stretched-link" name="add" value="{{ product[3] }}">
+                            Добавить в корзину
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
