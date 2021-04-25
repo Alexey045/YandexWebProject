@@ -102,7 +102,7 @@ def payment():
             db_sess.delete(product)
             db_sess.commit()
         summ = 0
-        return redirect('/success')  # ToDo
+        return redirect('/success')
     return render_template('payment.html', title='Оплата', form=form, summ=summ)
 
 
