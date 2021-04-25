@@ -94,9 +94,10 @@ def cart():
 def payment():
     global summ
     form = PaymentForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         db_sess = db_session.create_session()
-        res = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == flask_login.current_user).all()
+        owner = db_sess.query(Cart.Id).filter(Cart.Owner == flask_login.current_user.id).first()
+        res = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == owner[0]).all()
         for product in res:
             db_sess.delete(product)
             db_sess.commit()
