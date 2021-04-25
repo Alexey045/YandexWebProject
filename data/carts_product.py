@@ -5,7 +5,7 @@ from data.db_session import SqlAlchemyBase
 from sqlalchemy.orm import relationship
 
 
-class CartProduct(SqlAlchemyBase):
+class CartsProduct(SqlAlchemyBase):
     __tablename__ = 'CartsProduct'
 
     Id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

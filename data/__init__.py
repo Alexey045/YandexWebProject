@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 from data import db_session
 from data.carts import Cart
-from data.carts_product import CartProduct
+from data.carts_product import CartsProduct
 from data.category import Category
 from data.product import Product
 from data.users import User
@@ -100,10 +100,10 @@ def add_to_cart(user, product):
         product = db_sess.query(Product).filter(Product.Id == product).first()
     else:
         raise Exception("Недопустимый класс product")
-    cartproduct = CartProduct(OwnerCart=cartId,
-                              ProductId=product.Id,
-                              Status=0,
-                              RealTimePrice=product.Price)
+    cartproduct = CartsProduct(OwnerCart=cartId,
+                               ProductId=product.Id,
+                               Status=0,
+                               RealTimePrice=product.Price)
     db_sess.add(cartproduct)
     db_sess.commit()
 
@@ -116,7 +116,8 @@ def buy_product(user_or_cart):
         cart = user_or_cart
     else:
         raise Exception("Недопустимый класс user_or_cart")
-    all_prodCart = db_sess.query(CartProduct).filter(CartProduct.Status == 0, CartProduct.OwnerCart == cart.Id)
+    all_prodCart = db_sess.query(CartsProduct).filter(CartsProduct.Status == 0,
+                                                      CartsProduct.OwnerCart == cart.Id)
     return all_prodCart
 
 

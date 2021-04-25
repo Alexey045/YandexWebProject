@@ -3,9 +3,9 @@ from flask import Flask, render_template, request
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
 import data
-from data import db_session, Category, Product
+from data import db_session, Category, Product, CartsProduct, Cart
 from data.users import User
-from forms import RegisterForm, LoginForm, ProfileForm, ProductForm
+from forms import RegisterForm, LoginForm, ProfileForm, ProductForm, PaymentForm
 import os
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -16,6 +16,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['SECRET_KEY'] = "My little strange password that i don`t understand"
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+summ = 0
 
 
 @app.route('/')
@@ -48,7 +50,7 @@ def cat(Cate):
 def prod(Cate, prod):
     db_sess = db_session.create_session()
     ID = int(str(request.url).split('/')[-1])
-    if request.form.get("add"):  # ToDo
+    if request.form.get("add"):
         if flask_login.current_user.is_anonymous:
             return redirect('/registration')
         elif not flask_login.current_user.is_anonymous:
@@ -72,7 +74,51 @@ def prod(Cate, prod):
 
 @app.route('/cart')
 def cart():
-    return render_template('cart.html', title='Коризна')
+    global summ
+    summ = 0
+    db_sess = db_session.create_session()
+    res = db_sess.query(Cart.Id).filter(Cart.Owner == flask_login.current_user.id).first()
+    prdcts = db_sess.query(CartsProduct.ProductId, CartsProduct.Id).filter(
+        CartsProduct.OwnerCart == res[0]).all()
+    products = []
+    for prd in prdcts:
+        product = db_sess.query(Product).filter(Product.Id == prd[0]).first()
+        price = db_sess.query(Product.Price).filter(Product.Id == prd[0]).first()
+        summ += price[0]
+        ID = prd[1]
+        products.append([product, ID])
+    return render_template('cart.html', title='Коризна', products=products, summ=summ)
+
+
+@app.route('/payment', methods=['GET', 'POST'])
+def payment():
+    global summ
+    form = PaymentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        res = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == flask_login.current_user).all()
+        for product in res:
+            db_sess.delete(product)
+            db_sess.commit()
+        summ = 0
+        return redirect('/success')  # ToDo
+    return render_template('payment.html', title='Оплата', form=form, summ=summ)
+
+
+@app.route('/success')
+def success():
+    return render_template('success.html', title='Hypewave')
+
+
+@app.route('/delete/<product>')
+def delete_c_p(product):
+    global summ
+    db_sess = db_session.create_session()
+    res = db_sess.query(CartsProduct).filter(CartsProduct.Id == product).first()
+    db_sess.delete(res)
+    db_sess.commit()
+    summ = 0
+    return redirect('/cart')
 
 
 @app.route('/delete_product')
@@ -138,6 +184,12 @@ def profile():
 def delete_profile():
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
+    Id = db_sess.query(Cart.Id).filter(Cart.Owner == flask_login.current_user.id).first()
+    car_t = db_sess.query(Cart).filter(Cart.Owner == flask_login.current_user.id).first()
+    prd = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == Id).all()
+    for i in prd:
+        db_sess.delete(i)
+    db_sess.delete(car_t)
     db_sess.delete(user)
     db_sess.commit()
     return redirect('/')
@@ -193,11 +245,6 @@ def add_product():
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
-
-
-@app.route('/success')
-def success():
-    return 'success'
 
 
 @app.route('/about')
