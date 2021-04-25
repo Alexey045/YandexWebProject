@@ -187,7 +187,7 @@ def delete_profile():
     user = db_sess.query(User).filter(User.id == flask_login.current_user.id).first()
     Id = db_sess.query(Cart.Id).filter(Cart.Owner == flask_login.current_user.id).first()
     car_t = db_sess.query(Cart).filter(Cart.Owner == flask_login.current_user.id).first()
-    prd = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == Id).all()
+    prd = db_sess.query(CartsProduct).filter(CartsProduct.OwnerCart == Id[0]).all()
     for i in prd:
         db_sess.delete(i)
     db_sess.delete(car_t)
